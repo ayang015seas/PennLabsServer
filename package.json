@@ -1,0 +1,27 @@
+{
+  "name": "PennLabsServer",
+  "version": "1.0.0",
+  "description": "This is my submission for the PennLabs server challenge",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "scrape": "node scraper.js",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ayang015seas/PennLabsServer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ayang015seas/PennLabsServer/issues"
+  },
+  "homepage": "https://github.com/ayang015seas/PennLabsServer#readme",
+  "dependencies": {
+    "csv-writer": "^1.5.0",
+    "express": "^4.17.1",
+    "sentiment": "^5.0.2"
+  }
+}
