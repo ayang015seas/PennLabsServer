@@ -18,6 +18,18 @@ npm install
 To Scrape: npm run scrape
 To Start the Server: npm run start 
 
+URL for Get Routes: 
+Basic Welcome Message: http://localhost:3000/
+API Welcome Message: http://localhost:3000/api
+Club JSON: http://localhost:3000/api/clubs
+Example User: http://localhost:3000/api/users/jenThePenn
+
+URL for Post Routes: 
+Club Favorites: http://localhost:3000/api/favorites
+Club Creation: http://localhost:3000/api/clubs
+Club Comments: http://localhost:3000/api/comments
+
+
 If these commands do not work, please let me know since I've tested them and they definitely should work. (It also could be if you don't have chrome, since the API relies on the chrome browser)
 
 
@@ -37,7 +49,7 @@ At the end, the function exits after writing to files. Very straightforward over
 
 Next, I will move onto the index.js file, which is the actual server.
 
-One of the things I remember discussing with Valencia during the interview was how comments generally lead to a lot of trolling and badness even though people want to see them. This is why sentiment analysis is a potential option - it takes comments and produces an integer scoring based what people really have to say. It's by no means a perfect solution but it could be an interesting idea. 
+One of the things I remember discussing with Valencia during the interview was how comments generally lead to a lot of trolling and badness even though people want to see them. This is why sentiment analysis is a potential option - it takes comments and produces an integer scoring based what people really have to say. It could potentially serve as a supplementary rating or be used to filter out comments that are too vulgar. 
 
 In this file, we have 3 main data structures: Users, clubFavorites, and data. 
 The data is simply the raw JSON data that is read from the JSON file that we scraped. 
@@ -49,6 +61,8 @@ In real production code, I would have integrated the data with a MongoDB server 
 The two notable routes are near the bottom of the file. The first is /api/favorite. The way this works is that users each have an object with the clubs they favorited already. If they already favorited it, they cannot do so again. 
 
 The second notable route is the comment route, with /api/comment. This route interacts with the clubFavorites object, and updates the list of comments for each club. Additionally, it also updates the sentiment score for the club via an average. 
+
+Finally, the server also uses the "helmet" middleware package that helps set correct HTTP headers for security reasons. 
 
 Everything else should do pretty much exactly what the challenge specified, and if you have any questions or feedback about it please tell me about it. 
 

@@ -1,6 +1,10 @@
 var express = require('express');
 var fs = require('fs');
 var app = express();
+var helmet = require('helmet');
+
+// Helmet Enhances HTTP security
+app.use(helmet());
 
 // Sentiment Analysis Will be used for Comment Scoring
 var Sentiment = require('sentiment');
@@ -12,14 +16,14 @@ var data = JSON.parse(hostFile);
 
 // Stores the user info and the club info
 users = {};
-clubFavorites = {}
+clubData = {};
 
 // Instantiates the clubInfo with name, comments, sentiment score, and favorites
 for (i = 0; i < data.length; i++) {
-	clubFavorites[data[i].name] = {};
-	clubFavorites[data[i].name].comments = [];
-	clubFavorites[data[i].name].sentiment = 0;
-	clubFavorites[data[i].name].favorites = 0;
+	clubData[data[i].name] = {};
+	clubData[data[i].name].comments = [];
+	clubData[data[i].name].sentiment = 0;
+	clubData[data[i].name].favorites = 0;
 }
 
 /*
@@ -103,21 +107,30 @@ app.get('/', async function(req, res) {
 	res.send("Welcome to the Penn Club Review!");
 });
 
+/*
+	Standard API route
+*/
 app.get('/api', async function(req, res) {
 	res.send("Welcome to the Penn Club Review API!");
 });
 
+/*
+	Route for club JSON data 
+*/
 app.get('/api/clubs', async function(req, res) {
 	res.send(JSON.stringify(data));
 });
 
+/*
+	Route to get user data (directions in the readme)
+*/
 app.get('/api/users/:username', async function (req, res) {
 	var usrname = req.params.username;
 	var result = users[usrname];
 	if (result != undefined) {
 		// make sure to take out the sensitive data before sending
-		result['password'] = "[REDACTED]"
-		result['favorites'] = "[REDACTED]"
+		result['password'] = "[REDACTED]";
+		result['favorites'] = "[REDACTED]";
 		res.send(result);
 	}
 	else {
@@ -125,11 +138,14 @@ app.get('/api/users/:username', async function (req, res) {
 	}
 })
 
+/*
+	Route to post/create a new club
+*/
 app.post('/api/clubs', async function(req, res) {
 	try{
 		// we take the req.body.data because I'm assuming 
 		// the user is sending posts via the Axios API
-		var reqInfo = JSON.stringify(req.body.data);
+		var reqInfo = JSON.parse(req.body.data);
 		updateJSON(reqInfo);
 		res.send(200);
 	}
@@ -156,12 +172,12 @@ app.post('/api/favorite', async function(req, res) {
 
 		// check if the user has already favorited
 		if (users[username].favorites.includes(fav)) {
-			res.send("Already Marked!")
+			res.send("Already Marked!");
 		}
 		else {
 			// if not, update club favorites statistics
 			users[username].favorites.push(fav);
-			clubFavorites[fav].favorites = clubFavorites[fav].favorites + 1;
+			clubData[fav].favorites = clubData[fav].favorites + 1;
 			res.sendStatus(200);
 		}
 	}
@@ -188,9 +204,9 @@ app.post('/api/comment', async function(req, res) {
 		var score = sentimentAnalyze(comment);
 		
 		// update average sentiment
-		clubFavorites[club].comments.push(comment);
-		clubFavorites[club].comments.length = clubFavorites[club].comments.length + 1;
-		clubFavorites[club].sentiment = (clubFavorites[club].sentiment + score) / clubFavorites[club].comments.length;
+		clubData[club].comments.push(comment);
+		var commentNumber = clubData[club].comments.length + 1;
+		clubData[club].sentiment = (clubData[club].sentiment + score) / commentNumber;
 		res.send("Comment Updated");
 	}
 	catch (err) {
@@ -199,6 +215,7 @@ app.post('/api/comment', async function(req, res) {
 });
 
 // create user as per instructions 
+console.log("Creating User");
 createNewUser('jen', 'jenThePenn', 'jenPenn@seas.upenn.edu', 'password');
 
 // start server 

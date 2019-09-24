@@ -38,29 +38,30 @@ function scrape() {
 			  	args:[]}
 			);
 			const page = await browser.newPage();
+			console.log("--- STARTING BROWSER ---");
 			await page.goto('https://ocwp.pennlabs.org/');
 			const result = await page.evaluate(() => {
 				// get all clubnames
 		 		var clubNames = Array.from(document.querySelectorAll('.club-name'));
 		        var names = clubNames.map(element => {
-		            return element.innerText
+		            return element.innerText;
 		        });
 		        // get all descriptions
 		        var descriptions = Array.from(document.querySelectorAll('div.box em'));
 		        var descriptionArray = descriptions.map(element => {
-		            return element.innerText
+		            return element.innerText;
 		        });
 
 		        // get all categories
 		        var categories = Array.from(document.querySelectorAll('div.box div'));
 		        var catArray = categories.map(element => {
-		            return element.innerText.split('\n')
+		            return element.innerText.split('\n');
 		        });
 
 		        return {names: names, descriptions: descriptionArray, categories: catArray};
 
 		 	})
-		 	resolve(result)
+		 	resolve(result);
 
 		 	// close browser to free up resources 
 			await browser.close();
@@ -92,6 +93,7 @@ scrape().then(function(res) {
 			    {id: 'categories', title: 'Categories'},
 			  ]
 			});
+			console.log("--- FINISHED SCRAPE ---")
 			csvWriter  
 			  .writeRecords(clubs)
 			  // Exit after finishing
