@@ -10,7 +10,7 @@ on the Frontend react challenge. However, after reading through the challenges I
 
 3. The repo also contains a CSV from the club scraping and a JSON file with the raw data if you want to take a look at those. 
 
-Running Instructions
+# Running Instructions
 After cloning this repository, run the following commands:
 
 npm install
@@ -32,7 +32,14 @@ Club Comments: http://localhost:3000/api/comments
 
 If these commands do not work, please let me know since I've tested them and they definitely should work. (It also could be if you don't have chrome, since the API relies on the chrome browser)
 
+# Testing
+The server should run at http://localhost:3000/
 
+The fake user that was created had a username of jennThePenn, so that route is: 
+http://localhost:3000/api/users/jennThePenn
+
+
+# Explanation
 I will start with explaining the Scraper.
 
 One of the advantages of using JavaScript over python is the ability to use Google's puppeteer API. Puppeteer has a lot of built in features for really detailed scraping, screenshots, metadata/caching analysis, and even performance metrics to see how fast components of your frontend are loading. Although it tends to be more semantic than BeautifulSoup4, I believe it also offers more options. 
